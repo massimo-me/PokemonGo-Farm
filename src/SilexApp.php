@@ -6,7 +6,10 @@ use ChiarilloMassimo\PokemonGo\Farm\Controller\BotController;
 use ChiarilloMassimo\PokemonGo\Farm\Controller\DashboardController;
 use Igorw\Silex\ConfigServiceProvider;
 use Silex\Application;
+use Silex\Provider\FormServiceProvider;
+use Silex\Provider\TranslationServiceProvider;
 use Silex\Provider\TwigServiceProvider;
+use Symfony\Component\Translation\Loader\JsonFileLoader;
 
 /**
  * Class App
@@ -51,6 +54,8 @@ class SilexApp
         $this->registerConfigurations();
         $this->registerControllers();
         $this->registerTwig();
+        $this->registerForm();
+        $this->registerTranslation();
 
         return $app;
     }
@@ -95,6 +100,25 @@ class SilexApp
         $this->app->register(new TwigServiceProvider(), [
             'twig.path' => sprintf('%s/../src/Resources/views', $this->app['app.dir'])
         ]);
+    }
+
+    protected function registerForm()
+    {
+        $this->app->register(new FormServiceProvider());
+    }
+
+    protected function registerTranslation()
+    {
+        $this->app->register(new TranslationServiceProvider());
+        $appDir = $this->app['app.dir'];
+
+        $this->app->extend('translator', function($translator) use ($appDir) {
+            $translator->addLoader('json', new JsonFileLoader());
+
+            $translator->addResource('json', sprintf('%s/%s', $appDir, 'locales/en.json'), 'en');
+
+            return $translator;
+        });
     }
 
     /**

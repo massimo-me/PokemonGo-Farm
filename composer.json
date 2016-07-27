@@ -3,7 +3,13 @@
         "silex/silex": "~1.1",
         "igorw/config-service-provider": "^1.2",
         "symfony/process": "^3.1",
-        "twig/twig": "^1.24"
+        "twig/twig": "^1.24",
+        "symfony/form": "^3.1",
+        "symfony/twig-bridge": "^3.1",
+        "symfony/security": "^3.1",
+        "symfony/validator": "^3.1",
+        "symfony/config": "^3.1",
+        "symfony/translation": "^3.1"
     },
     "autoload": {
         "psr-4": {

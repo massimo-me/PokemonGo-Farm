@@ -2,6 +2,7 @@
 
 namespace ChiarilloMassimo\PokemonGo\Farm\Controller;
 
+use ChiarilloMassimo\PokemonGo\Farm\Form\Type\ConfigType;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -33,6 +34,9 @@ class BotController extends BaseController
      */
     public function newAction(Request $request)
     {
-        return $this->getApp()['twig']->render('bot/new.html.twig');
+        $form = $this->getApp()['form.factory']->create(ConfigType::class);
+        return $this->getApp()['twig']->render('bot/new.html.twig', [
+            'form' => $form->createView()
+        ]);
     }
 }
