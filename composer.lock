@@ -4,9 +4,66 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "91b68680fa1fb7a48fe45bb20daa62f0",
-    "content-hash": "85f3e1ccb942151a1dc3ae7815a23cf1",
+    "hash": "a844fd5cd43d6cb55002339b9d5fa9f9",
+    "content-hash": "63aac0c0053e037763c3e9be9e31b25d",
     "packages": [
+        {
+            "name": "igorw/config-service-provider",
+            "version": "v1.2.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/igorw/ConfigServiceProvider.git",
+                "reference": "092ed2c762bbae331e3f51d4a17f67310bf99a81"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/igorw/ConfigServiceProvider/zipball/092ed2c762bbae331e3f51d4a17f67310bf99a81",
+                "reference": "092ed2c762bbae331e3f51d4a17f67310bf99a81",
+                "shasum": ""
+            },
+            "require": {
+                "silex/silex": "~1.0"
+            },
+            "require-dev": {
+                "jamesmoss/toml": "~0.1",
+                "symfony/yaml": "~2.1"
+            },
+            "suggest": {
+                "jamesmoss/toml": "~0.1",
+                "symfony/yaml": "~2.1"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.2-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Igorw\\Silex": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Igor Wiedler",
+                    "email": "igor@wiedler.ch",
+                    "homepage": "http://wiedler.ch/igor/"
+                },
+                {
+                    "name": "Contributors",
+                    "homepage": "https://github.com/igorw/ConfigServiceProvider/contributors"
+                }
+            ],
+            "description": "A config ServiceProvider for Silex with support for php, json and yaml.",
+            "keywords": [
+                "silex"
+            ],
+            "time": "2014-07-06 10:59:11"
+        },
         {
             "name": "pimple/pimple",
             "version": "v1.1.1",
@@ -480,6 +537,55 @@
             "time": "2016-05-18 14:26:46"
         },
         {
+            "name": "symfony/process",
+            "version": "v3.1.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/process.git",
+                "reference": "5c11a1a4d4016662eeaf0f8757958c7de069f9a0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/process/zipball/5c11a1a4d4016662eeaf0f8757958c7de069f9a0",
+                "reference": "5c11a1a4d4016662eeaf0f8757958c7de069f9a0",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.5.9"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.1-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Component\\Process\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Symfony Process Component",
+            "homepage": "https://symfony.com",
+            "time": "2016-06-29 05:42:25"
+        },
+        {
             "name": "symfony/routing",
             "version": "v3.0.8",
             "source": {
@@ -553,6 +659,67 @@
                 "url"
             ],
             "time": "2016-06-29 05:40:00"
+        },
+        {
+            "name": "twig/twig",
+            "version": "v1.24.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/twigphp/Twig.git",
+                "reference": "3566d311a92aae4deec6e48682dc5a4528c4a512"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/twigphp/Twig/zipball/3566d311a92aae4deec6e48682dc5a4528c4a512",
+                "reference": "3566d311a92aae4deec6e48682dc5a4528c4a512",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.2.7"
+            },
+            "require-dev": {
+                "symfony/debug": "~2.7",
+                "symfony/phpunit-bridge": "~2.7"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.24-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Twig_": "lib/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com",
+                    "homepage": "http://fabien.potencier.org",
+                    "role": "Lead Developer"
+                },
+                {
+                    "name": "Armin Ronacher",
+                    "email": "armin.ronacher@active-4.com",
+                    "role": "Project Founder"
+                },
+                {
+                    "name": "Twig Team",
+                    "homepage": "http://twig.sensiolabs.org/contributors",
+                    "role": "Contributors"
+                }
+            ],
+            "description": "Twig, the flexible, fast, and secure template language for PHP",
+            "homepage": "http://twig.sensiolabs.org",
+            "keywords": [
+                "templating"
+            ],
+            "time": "2016-05-30 09:11:59"
         }
     ],
     "packages-dev": [],

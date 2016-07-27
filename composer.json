@@ -1,5 +1,13 @@
 {
     "require": {
-        "silex/silex": "~1.1"
+        "silex/silex": "~1.1",
+        "igorw/config-service-provider": "^1.2",
+        "symfony/process": "^3.1",
+        "twig/twig": "^1.24"
+    },
+    "autoload": {
+        "psr-4": {
+            "ChiarilloMassimo\\PokemonGo\\Farm\\" : "src/"
+        }
     }
 }
