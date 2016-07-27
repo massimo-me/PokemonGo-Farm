@@ -11,10 +11,13 @@ Powerfull web interface to manage your bot ⚡️
 - [x] Run PokemonGo-Bot
 - [x] View activity
 
-#Test 
+##Install 
 
 `composer install`
 
 `bower install`
 
 `cp app/parameters.json.dist app/parameters.json`
+
+##Run ⚡️
+`php -S 127.0.0.1:90 web/index.php`
