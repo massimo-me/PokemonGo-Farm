@@ -2,93 +2,100 @@
 
 {% extends 'base.html.twig' %}
 
-{% block page_title %}New PokemonGo-Bot{% endblock %}
+{% block page_title %}
+    New PokemonGo-Bot
+{% endblock %}
 
 {% block content %}
     <div class="row">
         <div class="col-lg-12">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    config.json
+                    <b>Options</b>
                 </div>
                 <div class="panel-body">
                     <div class="row">
                         <div class="col-lg-12">
-                            {{ form_start(form) }}
-                                <div class="panel panel-default">
-                                    <div class="panel-heading">Account</div>
-                                    <div class="panel-body">
-                                        {{ form_row(form.authService) }}
-                                        {{ form_row(form.username) }}
-                                        {{ form_row(form.password) }}
-                                    </div>
-                                </div>
-
-                                <div class="panel panel-default">
-                                    <div class="panel-heading">Map</div>
-                                    <div class="panel-body">
-                                        <div class="row">
-                                            <div class="col-lg-6">
-                                                {{ form_row(form.gmapKey) }}
-                                            </div>
-                                            <div class="col-lg-6">
-                                                {{ form_row(form.maxSteps) }}
-                                            </div>
-                                        </div>
-                                        {{ form_row(form.locationCache) }}
-                                        <code>
-                                            <b>Max Steps:</b> The steps around your initial location (DEFAULT 5 mean 25 cells around your location) that will be explored
-                                        </code>
-                                    </div>
-                                </div>
-
-                                <div class="panel panel-default">
-                                    <div class="panel-heading">Farm</div>
-                                    <div class="panel-body">
-                                        {{ form_row(form.mode) }}
-                                        <div class="row">
-                                            <div class="col-lg-6">
-                                                {{ form_row(form.walk) }}
-                                            </div>
-                                            <div class="col-lg-6">
-                                                {{ form_row(form.distanceUnit) }}
-                                            </div>
-                                        </div>
-                                        {{ form_row(form.initialTransfer) }}
-                                        <div class="row">
-                                            <div class="col-lg-4">
-                                                {{ form_row(form.cpMin) }}
-                                            </div>
-                                            <div class="col-lg-4">
-                                                {{ form_row(form.evolveSpeed) }}
-                                            </div>
-                                            <div class="col-lg-4">
-                                                {{ form_row(form.evolveCaptured) }}
-                                            </div>
-                                        </div>
-                                        {{ form_row(form.evolveAll) }}
-                                        {{ form_row(form.itemFilter) }}
-                                        {{ form_row(form.useLuckyEgg) }}
-                                        <code>
-                                            <b>Initial Transfer:</b> Set this to min CP to transfer your Pokémon at the beginning of the run (0 disabled). All duplicate Pokemon under VALUE will be transferred, keeping the highest CP of each type.
-                                        </code>
-                                    </div>
-                                </div>
-
-                                <div class="panel panel-default">
-                                    <div class="panel-heading">Other</div>
-                                    <div class="panel-body">
-                                        {{ form_row(form.debug) }}
-                                        {{ form_row(form.test) }}
-                                    </div>
-                                </div>
-                            {{ form_end(form) }}
+                            {{ 'bot_new.read_doc'|trans|raw }}
                         </div>
+
+                        {{ form_errors(form) }}
+
+                        {{ form_start(form, {'action': path('bot_save'), 'method': 'POST'}) }}
+
+                        <div class="col-lg-12">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">{{ 'bot_new.login'|trans }}</div>
+                                <div class="panel-body">
+                                    {{ form_row(form.authService) }}
+                                    {{ form_row(form.username) }}
+                                    {{ form_row(form.password) }}
+                                </div>
+                            </div>
+
+                            <div class="panel panel-default">
+                                <div class="panel-heading">{{ 'bot_new.map'|trans }}</div>
+                                <div class="panel-body">
+                                    {{ form_row(form.location) }}
+                                    <div class="gmap-location"></div>
+                                    <div class="row">
+                                        <div class="col-lg-6">
+                                            {{ form_row(form.gmapKey) }}
+                                        </div>
+                                        <div class="col-lg-6">
+                                            {{ form_row(form.maxSteps) }}
+                                        </div>
+                                    </div>
+                                    {{ form_row(form.locationCache) }}
+                                </div>
+                            </div>
+
+                            <div class="panel panel-default">
+                                <div class="panel-heading">{{ 'bot_new.bot'|trans }}</div>
+                                <div class="panel-body">
+                                    {{ form_row(form.mode) }}
+                                    <div class="row">
+                                        <div class="col-lg-6">
+                                            {{ form_row(form.walk) }}
+                                        </div>
+                                        <div class="col-lg-6">
+                                            {{ form_row(form.distanceUnit) }}
+                                        </div>
+                                    </div>
+                                    {{ form_row(form.initialTransfer) }}
+                                    <div class="row">
+                                        <div class="col-lg-4">
+                                            {{ form_row(form.cpMin) }}
+                                        </div>
+                                        <div class="col-lg-4">
+                                            {{ form_row(form.evolveSpeed) }}
+                                        </div>
+                                        <div class="col-lg-4">
+                                            {{ form_row(form.evolveCaptured) }}
+                                        </div>
+                                    </div>
+                                    {{ form_row(form.evolveAll) }}
+                                    {{ form_row(form.itemFilter) }}
+                                    {{ form_row(form.useLuckyEgg) }}
+                                </div>
+                            </div>
+
+                            <div class="panel panel-default">
+                                <div class="panel-heading">{{ 'bot_new.dev'|trans }}</div>
+                                <div class="panel-body">
+                                    {{ form_row(form.debug) }}
+                                    {{ form_row(form.test) }}
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="col-lg-12">
                             <button type="submit" class="btn btn-success btn-lg btn-block">
-                                <i class="fa fa-save"></i> Create .json
+                                <i class="fa fa-save"></i> {{ 'bot.new.create'|trans }}
                             </button>
                         </div>
+
+                        {{ form_end(form) }}
                     </div>
                 </div>
             </div>
@@ -100,8 +107,25 @@
     {{ parent() }}
     <script type="text/javascript">
         $(function() {
-            $("#config_evolveAll").select2();
-            $("#config_itemFilter").select2();
+            $('#config_evolveAll').select2();
+            $('#config_itemFilter').select2();
+
+            $('#config_location')
+                .geocomplete({
+                    map: '.gmap-location',
+                    location: new google.maps.LatLng(40.7828647, -73.9653551),
+                    markerOptions: {
+                        draggable: true
+                    }
+                })
+                .bind('geocode:dragged', function(event, location) {
+                    var geocoder  = new google.maps.Geocoder();
+                    geocoder.geocode({'latLng': new google.maps.LatLng(location.lat(), location.lng())}, function (results, status) {
+                        if(status == google.maps.GeocoderStatus.OK) {
+                            $('#config_location').val(results[0].formatted_address);
+                        };
+                    });
+                });
         });
     </script>
 {% endblock %}

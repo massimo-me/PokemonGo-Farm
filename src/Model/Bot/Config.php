@@ -307,7 +307,7 @@ class Config
     }
 
     /**
-     * @return boolean|array
+     * @return array
      */
     public function getEvolveAll()
     {

@@ -21,7 +21,7 @@ class DashboardController extends BaseController
 
         $controllers->get('/', function() {
             return call_user_func([$this, 'indexAction']);
-        });
+        })->bind('dashboard');
 
         return $controllers;
     }

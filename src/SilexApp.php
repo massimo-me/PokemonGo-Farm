@@ -9,6 +9,7 @@ use Silex\Application;
 use Silex\Provider\FormServiceProvider;
 use Silex\Provider\TranslationServiceProvider;
 use Silex\Provider\TwigServiceProvider;
+use Silex\Provider\UrlGeneratorServiceProvider;
 use Symfony\Component\Translation\Loader\JsonFileLoader;
 
 /**
@@ -56,6 +57,7 @@ class SilexApp
         $this->registerTwig();
         $this->registerForm();
         $this->registerTranslation();
+        $this->registerUrlGenerator();
 
         return $app;
     }
@@ -100,6 +102,14 @@ class SilexApp
         $this->app->register(new TwigServiceProvider(), [
             'twig.path' => sprintf('%s/../src/Resources/views', $this->app['app.dir'])
         ]);
+
+        $gmapBrowserApiKey = $this->app['gmap.browser.api_key'];
+
+        $this->app->extend('twig', function($twig) use ($gmapBrowserApiKey) {
+            $twig->addGlobal('gmap_api_key', $gmapBrowserApiKey);
+
+            return $twig;
+        });
     }
 
     protected function registerForm()
@@ -119,6 +129,11 @@ class SilexApp
 
             return $translator;
         });
+    }
+
+    protected function registerUrlGenerator()
+    {
+        $this->app->register(new UrlGeneratorServiceProvider());
     }
 
     /**

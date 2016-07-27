@@ -1,3 +1,6 @@
 {
-  "debug" : true
+  "debug" : true,
+  "gmap.browser.api_key" : "%gmap_browser_api_key%",
+  "gmap.server.api_key" : "%gmap_server_api_key%",
+  "locale" : "%locale%"
 }
