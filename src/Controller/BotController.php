@@ -3,6 +3,7 @@
 namespace ChiarilloMassimo\PokemonGo\Farm\Controller;
 
 use ChiarilloMassimo\PokemonGo\Farm\Form\Type\ConfigType;
+use ChiarilloMassimo\PokemonGo\Farm\Service\ConfigManager;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -44,10 +45,15 @@ class BotController extends BaseController
         ]);
     }
 
+    /**
+     * @param Request $request
+     * @return mixed
+     */
     public function saveAction(Request $request)
     {
         $form = $this->getApp()['form.factory']->create(ConfigType::class);
-        $form->handleREquest($request);
+
+        $form->handleRequest($request);
 
         if (!$form->isValid()) {
             return $this->getApp()['twig']->render('bot/new.html.twig', [
@@ -55,6 +61,10 @@ class BotController extends BaseController
             ]);
         }
 
+        $this->getApp()['bot.config_manager']
+            ->create($form->getData());
+
         //@ToDo
+        return new Response('Ok ;)');
     }
 }

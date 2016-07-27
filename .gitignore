@@ -1,2 +1,4 @@
 /vendor
 /web/components
+/app/data*
+!/app/data/.gitkeep

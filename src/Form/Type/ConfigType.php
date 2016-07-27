@@ -40,7 +40,8 @@ class ConfigType extends AbstractType
                 'label' => 'bot.new.password'
             ])
             ->add('gmapKey', TextType::class, [
-                'label' => 'bot.new.gmap_key'
+                'label' => 'bot.new.gmap_key',
+                'data' => $options['gmap_key']
             ])
             ->add('maxSteps', NumberType::class, [
                 'label' => 'bot.new.max_steps',
@@ -92,8 +93,8 @@ class ConfigType extends AbstractType
             ->add('evolveCaptured', ChoiceType::class, [
                 'label' => 'bot.new.evolve_captured',
                 'choices' => [
-                    'Yes' => true,
-                    'No' => false
+                    'No' => false,
+                    'Yes' => true
                 ]
             ])
             ->add('evolveAll', ChoiceType::class, [
@@ -111,8 +112,8 @@ class ConfigType extends AbstractType
             ->add('useLuckyEgg', ChoiceType::class, [
                 'label' => 'bot.new.use_lucky_egg',
                 'choices' => [
+                    'No' => false,
                     'Yes' => true,
-                    'No' => false
                 ]
             ])
             ->add('itemFilter', ChoiceType::class, [
@@ -127,15 +128,15 @@ class ConfigType extends AbstractType
             ->add('debug', ChoiceType::class, [
                 'label' => 'bot.new.debug',
                 'choices' => [
-                    'Yes' => true,
-                    'No' => false
+                    'No' => false,
+                    'Yes' => true
                 ]
             ])
             ->add('test', ChoiceType::class, [
                 'label' => 'bot.new.test',
                 'choices' => [
+                    'No' => false,
                     'Yes' => true,
-                    'No' => false
                 ]
             ])
         ;
@@ -148,7 +149,7 @@ class ConfigType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' =>  Config::class,
-            'gmapKey' => SilexApp::getInstance()['gmap.server.api_key']
+            'gmap_key' => SilexApp::getInstance()['gmap.server.api_key']
         ]);
     }
 }

@@ -4,6 +4,7 @@ namespace ChiarilloMassimo\PokemonGo\Farm;
 
 use ChiarilloMassimo\PokemonGo\Farm\Controller\BotController;
 use ChiarilloMassimo\PokemonGo\Farm\Controller\DashboardController;
+use ChiarilloMassimo\PokemonGo\Farm\Service\ConfigManager;
 use Igorw\Silex\ConfigServiceProvider;
 use Silex\Application;
 use Silex\Provider\FormServiceProvider;
@@ -51,6 +52,7 @@ class SilexApp
 
         $this->app['app.dir'] = $this->getAppDir();
         $this->app['app.cache.dir'] = $this->getCacheDir();
+        $this->app['app.data.dir'] = $this->getDataDir();
 
         $this->registerConfigurations();
         $this->registerControllers();
@@ -58,6 +60,7 @@ class SilexApp
         $this->registerForm();
         $this->registerTranslation();
         $this->registerUrlGenerator();
+        $this->registerPokemonGoBotConfigManager();
 
         return $app;
     }
@@ -136,6 +139,13 @@ class SilexApp
         $this->app->register(new UrlGeneratorServiceProvider());
     }
 
+    protected function registerPokemonGoBotConfigManager()
+    {
+        $this->app['bot.config_manager'] = $this->app->share(function() {
+           return new ConfigManager();
+        });
+    }
+
     /**
      * @return string
      */
@@ -148,6 +158,14 @@ class SilexApp
         }
 
         return realpath($cacheDir);
+    }
+
+    /**
+     * @return string
+     */
+    protected function getDataDir()
+    {
+        return realpath(sprintf('%s/../app/data', __DIR__));
     }
 
     /**
