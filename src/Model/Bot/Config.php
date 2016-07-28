@@ -195,7 +195,7 @@ class Config
     /**
      * @return boolean
      */
-    public function isDebug()
+    public function getDebug()
     {
         return $this->debug;
     }
@@ -214,7 +214,7 @@ class Config
     /**
      * @return boolean
      */
-    public function isTest()
+    public function getTest()
     {
         return $this->test;
     }
@@ -252,7 +252,7 @@ class Config
     /**
      * @return boolean
      */
-    public function isLocationCache()
+    public function getLocationCache()
     {
         return $this->locationCache;
     }
@@ -315,7 +315,7 @@ class Config
     }
 
     /**
-     * @param boolean $evolveAll
+     * @param array $evolveAll
      * @return $this
      */
     public function setEvolveAll($evolveAll)
@@ -399,33 +399,5 @@ class Config
         $this->evolveCaptured = $evolveCaptured;
 
         return $this;
-    }
-
-    /**
-     * @return array
-     */
-    public function toArray()
-    {
-        return [
-            'auth_service' => $this->getAuthService(),
-            'username' => $this->getUsername(),
-            'password' => $this->getPassword(),
-            'location' => $this->getLocation(),
-            'gmapkey' => $this->getGmapKey(),
-            'max_steps' => $this->getMaxSteps(),
-            'mode' => $this->getMode(),
-            'walk' => $this->getWalk(),
-            'debug' => $this->isDebug(),
-            'test' => $this->isTest(),
-            'initial_transfer' => $this->getInitialTransfer(),
-            'location_cache' => $this->isLocationCache(),
-            'distance_unit' => $this->getDistanceUnit(),
-            'item_filter' => implode($this->getItemFilter(), ','),
-            'evolve_all' => (!$this->getEvolveAll()) ? 'NONE' : implode($this->getEvolveAll(), ','),
-            'evolve_speed' => $this->getEvolveSpeed(),
-            'cp_min' => $this->getCpMin(),
-            'use_lucky_egg' => $this->getUseLuckyEgg(),
-            'evolve_captured' => $this->getEvolveCaptured()
-        ];
     }
 }
