@@ -1,5 +1,6 @@
 {
     "virtual_env" : true,
     "gmap_browser_api_key" : "browser api key",
-    "gmap_server_api_key" : "server api key"
+    "gmap_server_api_key" : "server api key",
+    "locale" : "en"
 }
