@@ -1,4 +1,5 @@
 /vendor
 /web/components
+/app/config/parameters.json
 /app/data*
 !/app/data/.gitkeep
