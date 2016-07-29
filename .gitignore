@@ -4,4 +4,3 @@
 /app/data*
 !/app/data/.gitkeep
 /app/logs*
-!/app/data/.gitkeep
