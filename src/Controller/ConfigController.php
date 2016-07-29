@@ -3,6 +3,7 @@
 namespace ChiarilloMassimo\PokemonGo\Farm\Controller;
 
 use ChiarilloMassimo\PokemonGo\Farm\Form\Type\ConfigType;
+use ChiarilloMassimo\PokemonGo\Farm\Process\PokemonGoBotProcess;
 use ChiarilloMassimo\PokemonGo\Farm\Service\ConfigManager;
 use ChiarilloMassimo\PokemonGo\Farm\SilexApp;
 use Silex\Application;
@@ -130,20 +131,5 @@ class ConfigController extends BaseController
         return SilexApp::getInstance()->redirect(
             SilexApp::getInstance()['url_generator']->generate('config_list')
         );
-    }
-
-
-    /**
-     * @param $configName
-     */
-    protected function getConfig($configName)
-    {
-        $config = SilexApp::getInstance()['bot.config_manager']->find($configName);
-
-        if (!$config) {
-            throw new NotFoundHttpException(sprintf('%s not found', $configName));
-        }
-
-        return $config;
     }
 }

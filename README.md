@@ -26,4 +26,4 @@ Powerfull web interface to manage your bot ⚡️
 `cp app/parameters.json.dist app/parameters.json`
 
 ##Run ⚡️
-`php -S 127.0.0.1:90 web/index.php`
+`php -S 127.0.0.1:8080 -t web`

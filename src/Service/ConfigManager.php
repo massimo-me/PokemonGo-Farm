@@ -139,6 +139,15 @@ class ConfigManager
     }
 
     /**
+     * @param Config $config
+     * @return string
+     */
+    public function getPath(Config $config)
+    {
+        return sprintf('%s/%s', SilexApp::getInstance()['app.data.dir'], $config->getName());
+    }
+
+    /**
      * @param string $config
      * @return Config
      */

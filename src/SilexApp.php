@@ -68,7 +68,7 @@ class SilexApp
     protected function configureCustomParameters()
     {
         $this->app['app.dir'] = $this->getAppDir();
-        $this->app['app.cache.dir'] = $this->getCacheDir();
+        $this->app['app.logs.dir'] = $this->getLogsDir();
         $this->app['app.data.dir'] = $this->getDataDir();
     }
 
@@ -100,6 +100,10 @@ class SilexApp
                 [
                     'prefix' => '/config',
                     'class' => new ConfigController()
+                ],
+                [
+                    'prefix' => '/bot',
+                    'class' => new BotController()
                 ]
             ]
         );
@@ -161,15 +165,15 @@ class SilexApp
     /**
      * @return string
      */
-    protected function getCacheDir()
+    protected function getLogsDir()
     {
-        $cacheDir = sprintf('%s/../app/cache', __DIR__);
+        $logsDir = sprintf('%s/../app/logs', __DIR__);
 
-        if (!is_dir($cacheDir)) {
-            mkdir($cacheDir, 0775, true);
+        if (!is_dir($logsDir)) {
+            mkdir($logsDir, 0775, true);
         }
 
-        return realpath($cacheDir);
+        return realpath($logsDir);
     }
 
     /**
@@ -200,7 +204,7 @@ class SilexApp
             true
         ) + [
             'app.dir' => $this->app['app.dir'],
-            'app.cache.dir' => $this->app['app.cache.dir']
+            'app.logs.dir' => $this->app['app.logs.dir']
         ];
     }
 

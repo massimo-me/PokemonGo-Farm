@@ -29,4 +29,18 @@ class BaseController implements ControllerProviderInterface
     {
         return SilexApp::getInstance();
     }
+
+    /**
+     * @param $configName
+     */
+    protected function getConfig($configName)
+    {
+        $config = SilexApp::getInstance()['bot.config_manager']->find($configName);
+
+        if (!$config) {
+            throw new NotFoundHttpException(sprintf('%s not found', $configName));
+        }
+
+        return $config;
+    }
 }
