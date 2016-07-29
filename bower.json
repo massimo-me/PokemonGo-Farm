@@ -1,5 +1,5 @@
 {
-  "name" : "pokemongo-farm",
+  "name": "pokemongo-farm",
   "ignore": [
     "**/.*",
     "node_modules",
@@ -14,7 +14,7 @@
     "web/css/sb-admin-2.css",
     "web/js/sb-admin-2.js"
   ],
-  "directory" : "web/components",
+  "directory": "web/components",
   "dependencies": {
     "bootstrap": "~3.3.7",
     "datatables": "~1.10.4",
@@ -26,6 +26,9 @@
     "morrisjs": "~0.5.1",
     "datatables-responsive": "1.0.6",
     "bootstrap-social": "~4.8.0",
-    "flot.tooltip": "~0.8.4"
+    "flot.tooltip": "~0.8.4",
+    "select2": "^4.0.3",
+    "select2-bootstrap-theme": "^0.1.0-beta.8",
+    "geocomplete": "^1.7.0"
   }
 }
