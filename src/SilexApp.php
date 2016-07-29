@@ -52,10 +52,7 @@ class SilexApp
     {
         $this->app = $app;
 
-        $this->app['app.dir'] = $this->getAppDir();
-        $this->app['app.cache.dir'] = $this->getCacheDir();
-        $this->app['app.data.dir'] = $this->getDataDir();
-
+        $this->configureCustomParameters();
         $this->registerConfigurations();
         $this->registerSession();
         $this->registerControllers();
@@ -66,6 +63,23 @@ class SilexApp
         $this->registerPokemonGoBotConfigManager();
 
         return $app;
+    }
+
+    protected function configureCustomParameters()
+    {
+        $this->app['app.dir'] = $this->getAppDir();
+        $this->app['app.cache.dir'] = $this->getCacheDir();
+        $this->app['app.data.dir'] = $this->getDataDir();
+    }
+
+    protected function registerConfigurations()
+    {
+        $this->app->register(
+            new ConfigServiceProvider(
+                sprintf('%s/config/config.json', $this->getAppDir()),
+                $this->getParameters()
+            )
+        );
     }
 
     /**
@@ -91,16 +105,6 @@ class SilexApp
         );
 
         return $app;
-    }
-
-    protected function registerConfigurations()
-    {
-        $this->app->register(
-            new ConfigServiceProvider(
-                sprintf('%s/config/config.json', $this->getAppDir()),
-                $this->getParameters()
-            )
-        );
     }
 
     protected function registerSession()
