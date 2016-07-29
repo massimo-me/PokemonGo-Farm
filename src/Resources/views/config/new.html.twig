@@ -16,14 +16,14 @@
                 <div class="panel-body">
                     <div class="row">
                         <div class="col-lg-12">
-                            {{ 'bot_new.read_doc'|trans|raw }}
+                            {{ 'config_new.read_doc'|trans|raw }}
                         </div>
 
-                        {{ form_start(form, {'action': path('bot_save'), 'method': 'POST'}) }}
+                        {{ form_start(form, {'action': path('config_build'), 'method': 'POST'}) }}
 
                         <div class="col-lg-12">
                             <div class="panel panel-default">
-                                <div class="panel-heading">{{ 'bot_new.login'|trans }}</div>
+                                <div class="panel-heading">{{ 'config_new.login'|trans }}</div>
                                 <div class="panel-body">
                                     {{ form_row(form.authService) }}
                                     {{ form_row(form.username) }}
@@ -32,7 +32,7 @@
                             </div>
 
                             <div class="panel panel-default">
-                                <div class="panel-heading">{{ 'bot_new.map'|trans }}</div>
+                                <div class="panel-heading">{{ 'config_new.map'|trans }}</div>
                                 <div class="panel-body">
                                     {{ form_row(form.location) }}
                                     <div class="gmap-location"></div>
@@ -49,7 +49,7 @@
                             </div>
 
                             <div class="panel panel-default">
-                                <div class="panel-heading">{{ 'bot_new.bot'|trans }}</div>
+                                <div class="panel-heading">{{ 'config_new.bot'|trans }}</div>
                                 <div class="panel-body">
                                     {{ form_row(form.mode) }}
                                     <div class="row">
@@ -79,7 +79,7 @@
                             </div>
 
                             <div class="panel panel-default">
-                                <div class="panel-heading">{{ 'bot_new.dev'|trans }}</div>
+                                <div class="panel-heading">{{ 'config_new.dev'|trans }}</div>
                                 <div class="panel-body">
                                     {{ form_row(form.debug) }}
                                     {{ form_row(form.test) }}
@@ -89,7 +89,10 @@
 
                         <div class="col-lg-12">
                             <button type="submit" class="btn btn-success btn-lg btn-block">
-                                <i class="fa fa-save"></i> {{ 'bot.new.build'|trans }}
+                                <i class="fa fa-save"></i>
+                                {% block btn_submit %}
+                                    {{ 'config_new.build'|trans }}
+                                {% endblock %}
                             </button>
                         </div>
 
@@ -108,10 +111,16 @@
             $('#config_evolveAll').select2();
             $('#config_itemFilter').select2();
 
+            var location = $('#config_location').val();
+            if (!location) {
+                location = 'Central Park, New York';
+                $('#config_location').val(location);
+            }
+
             $('#config_location')
                 .geocomplete({
                     map: '.gmap-location',
-                    location: new google.maps.LatLng(40.7828647, -73.9653551),
+                    location: location,
                     markerOptions: {
                         draggable: true
                     }

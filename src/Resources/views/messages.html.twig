@@ -1,0 +1,13 @@
+{% set messages = app.session.getFlashBag().peekAll %}
+
+{% if messages is not empty %}
+    <div class="col-lg-12">
+        {% for key, values in messages %}
+            <div class="alert alert-{{ key }}">
+                {% for value in app.session.getFlashBag().get(key) %}
+                    {{ value|trans }} <br>
+                {% endfor %}
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}

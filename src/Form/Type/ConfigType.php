@@ -27,39 +27,38 @@ class ConfigType extends AbstractType
     {
         $builder
             ->add('authService', ChoiceType::class, [
-                'label' => 'bot.new.auth_service',
+                'label' => 'config_new.auth_service',
                 'choices' => [
                     'Google' => Config::AUTH_GOOGLE,
                     'Pokemon Trainer Club' => Config::AUTH_PTC
                 ]
             ])
             ->add('username', TextType::class, [
-                'label' => 'bot.new.username'
+                'label' => 'config_new.username'
             ])
-            ->add('password', PasswordType::class, [
-                'label' => 'bot.new.password'
+            ->add('password', TextType::class, [
+                'label' => 'config_new.password'
             ])
             ->add('gmapKey', TextType::class, [
-                'label' => 'bot.new.gmap_key',
+                'label' => 'config_new.gmap_key',
                 'data' => $options['gmap_key']
             ])
             ->add('maxSteps', NumberType::class, [
-                'label' => 'bot.new.max_steps',
+                'label' => 'config_new.max_steps',
                 'data' => 5
             ])
             ->add('location', TextType::class, [
-                'label' => 'bot.new.location',
-                'data' => 'Central Park West, New York'
+                'label' => 'config_new.location'
             ])
             ->add('locationCache', ChoiceType::class, [
-                'label' => 'bot.new.location_cache',
+                'label' => 'config_new.location_cache',
                 'choices' => [
                     'Yes' => true,
                     'No' => false
                 ]
             ])
             ->add('mode', ChoiceType::class, [
-                'label' => 'bot.new.mode',
+                'label' => 'config_new.mode',
                 'choices' => [
                     'All' => Config::MODE_ALL,
                     'Pokémon' => Config::MODE_POKE,
@@ -67,11 +66,11 @@ class ConfigType extends AbstractType
                 ]
             ])
             ->add('walk', NumberType::class, [
-                'label' => 'bot.new.walk',
+                'label' => 'config_new.walk',
                 'data' => 4.16
             ])
             ->add('distanceUnit', ChoiceType::class, [
-                'label' => 'bot.new.distance_unit',
+                'label' => 'config_new.distance_unit',
                 'choices' => [
                     'Kilometers' => Config::UNIT_KM,
                     'Miles' => Config::UNIT_MI,
@@ -79,26 +78,26 @@ class ConfigType extends AbstractType
                 ]
             ])
             ->add('initialTransfer', NumberType::class, [
-                'label' => 'bot.new.initial_tranfer',
+                'label' => 'config_new.initial_tranfer',
                 'data' => 0
             ])
             ->add('cpMin', NumberType::class, [
-                'label' => 'bot.new.cp_min',
+                'label' => 'config_new.cp_min',
                 'data' => 0,
             ])
             ->add('evolveSpeed', NumberType::class, [
-                'label' => 'bot.new.evolve_speed',
+                'label' => 'config_new.evolve_speed',
                 'data' => 20
             ])
             ->add('evolveCaptured', ChoiceType::class, [
-                'label' => 'bot.new.evolve_captured',
+                'label' => 'config_new.evolve_captured',
                 'choices' => [
                     'No' => false,
                     'Yes' => true
                 ]
             ])
             ->add('evolveAll', ChoiceType::class, [
-                'label' => 'bot.new.evolve_all',
+                'label' => 'config_new.evolve_all',
                 'choices' => array_combine(
                     array_values(Bot::$pokemons),
                     array_values(Bot::$pokemons)
@@ -110,14 +109,14 @@ class ConfigType extends AbstractType
                 'required' => false
             ])
             ->add('useLuckyEgg', ChoiceType::class, [
-                'label' => 'bot.new.use_lucky_egg',
+                'label' => 'config_new.use_lucky_egg',
                 'choices' => [
                     'No' => false,
                     'Yes' => true,
                 ]
             ])
             ->add('itemFilter', ChoiceType::class, [
-                'label' => 'bot.new.item_filter',
+                'label' => 'config_new.item_filter',
                 'choices' => array_flip(Bot::$items),
                 'multiple' => true,
                 'attr' => [
@@ -126,14 +125,14 @@ class ConfigType extends AbstractType
                 'required' => false
             ])
             ->add('debug', ChoiceType::class, [
-                'label' => 'bot.new.debug',
+                'label' => 'config_new.debug',
                 'choices' => [
                     'No' => false,
                     'Yes' => true
                 ]
             ])
             ->add('test', ChoiceType::class, [
-                'label' => 'bot.new.test',
+                'label' => 'config_new.test',
                 'choices' => [
                     'No' => false,
                     'Yes' => true,

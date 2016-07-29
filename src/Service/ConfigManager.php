@@ -129,6 +129,16 @@ class ConfigManager
     }
 
     /**
+     * @param Config $config
+     */
+    public function remove(Config $config)
+    {
+        return $this->filesystem->remove(
+            sprintf('%s/%s', SilexApp::getInstance()['app.data.dir'], $config->getName())
+        );
+    }
+
+    /**
      * @param string $config
      * @return Config
      */

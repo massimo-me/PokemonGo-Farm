@@ -3,11 +3,13 @@
 namespace ChiarilloMassimo\PokemonGo\Farm;
 
 use ChiarilloMassimo\PokemonGo\Farm\Controller\BotController;
+use ChiarilloMassimo\PokemonGo\Farm\Controller\ConfigController;
 use ChiarilloMassimo\PokemonGo\Farm\Controller\DashboardController;
 use ChiarilloMassimo\PokemonGo\Farm\Service\ConfigManager;
 use Igorw\Silex\ConfigServiceProvider;
 use Silex\Application;
 use Silex\Provider\FormServiceProvider;
+use Silex\Provider\SessionServiceProvider;
 use Silex\Provider\TranslationServiceProvider;
 use Silex\Provider\TwigServiceProvider;
 use Silex\Provider\UrlGeneratorServiceProvider;
@@ -55,6 +57,7 @@ class SilexApp
         $this->app['app.data.dir'] = $this->getDataDir();
 
         $this->registerConfigurations();
+        $this->registerSession();
         $this->registerControllers();
         $this->registerTwig();
         $this->registerForm();
@@ -81,8 +84,8 @@ class SilexApp
                     'class' => new DashboardController()
                 ],
                 [
-                    'prefix' => '/bot',
-                    'class' => new BotController()
+                    'prefix' => '/config',
+                    'class' => new ConfigController()
                 ]
             ]
         );
@@ -98,6 +101,11 @@ class SilexApp
                 $this->getParameters()
             )
         );
+    }
+
+    protected function registerSession()
+    {
+        $this->app->register(new SessionServiceProvider());
     }
 
     protected function registerTwig()
