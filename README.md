@@ -7,9 +7,12 @@ Powerfull web interface to manage your bot ⚡️
 
 #@Wip
 
-- [x] Create configuration
-- [x] Run PokemonGo-Bot
-- [x] View activity
+- [x] Build config.json
+- [x] Config list
+- [ ] Delete config
+- [ ] Edit config
+- [ ] Run PokemonGo-Bot
+- [ ] View activity
 
 ##Install 
 
