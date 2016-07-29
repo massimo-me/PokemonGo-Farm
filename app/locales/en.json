@@ -23,5 +23,9 @@
   "bot.new.use_lucky_egg" : "Use lucky egg",
   "bot.new.debug" : "Debug",
   "bot.new.test" : "Test",
-  "bot.new.create" : "Create .json"
+  "bot.new.buil" : "Build",
+  "bot_new.error" : "Unable to create your configuration file.",
+  "bot.new.btn_run" : "Run",
+  "bot.new.btn_edit" : "Edit",
+  "bot.new.btn_delete" : "Delete"
 }

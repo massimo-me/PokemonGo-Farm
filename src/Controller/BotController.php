@@ -4,7 +4,9 @@ namespace ChiarilloMassimo\PokemonGo\Farm\Controller;
 
 use ChiarilloMassimo\PokemonGo\Farm\Form\Type\ConfigType;
 use ChiarilloMassimo\PokemonGo\Farm\Service\ConfigManager;
+use ChiarilloMassimo\PokemonGo\Farm\SilexApp;
 use Silex\Application;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -26,11 +28,25 @@ class BotController extends BaseController
            return call_user_func([$this, 'newAction']);
         })->bind('bot_new');
 
+        $controllers->get('/list', function() {
+            return call_user_func([$this, 'listAction']);
+        })->bind('bot_list');
+
         $controllers->post('/save', function(Request $request) {
             return call_user_func([$this, 'saveAction'], $request);
         })->bind('bot_save');
 
         return $controllers;
+    }
+
+    /**
+     * @return Response
+     */
+    public function listAction()
+    {
+        return $this->getApp()['twig']->render('bot/list.html.twig', [
+            'configs' => SilexApp::getInstance()['bot.config_manager']->findAll()
+        ]);
     }
 
     /**
@@ -56,15 +72,16 @@ class BotController extends BaseController
         $form->handleRequest($request);
 
         if (!$form->isValid()) {
-            return $this->getApp()['twig']->render('bot/new.html.twig', [
-                'form' => $form->createView()
-            ]);
+            return $this->getApp()['twig']->render('bot/new.html.twig', ['form' => $form->createView()]);
         }
 
-        $this->getApp()['bot.config_manager']
-            ->create($form->getData());
+        $created = $this->getApp()['bot.config_manager']
+            ->build($form->getData());
 
-        //@ToDo
-        return new Response('Ok ;)');
+        if (!$created) {
+            $form->addError(new FormError('bot_new.error'));
+
+            return $this->getApp()['twig']->render('bot/new.html.twig', ['form' => $form->createView()]);
+        }
     }
 }

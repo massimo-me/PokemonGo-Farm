@@ -9,6 +9,8 @@ namespace ChiarilloMassimo\PokemonGo\Farm\Model\Bot;
  */
 class Config
 {
+    const EXTENSION = 'json';
+
     const AUTH_GOOGLE = 'google';
     const AUTH_PTC = 'ptc';
 
@@ -399,5 +401,13 @@ class Config
         $this->evolveCaptured = $evolveCaptured;
 
         return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        return sprintf('config_%s.%s', $this->getUsername(), self::EXTENSION);
     }
 }

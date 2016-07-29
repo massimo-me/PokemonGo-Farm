@@ -19,8 +19,6 @@
                             {{ 'bot_new.read_doc'|trans|raw }}
                         </div>
 
-                        {{ form_errors(form) }}
-
                         {{ form_start(form, {'action': path('bot_save'), 'method': 'POST'}) }}
 
                         <div class="col-lg-12">
@@ -91,7 +89,7 @@
 
                         <div class="col-lg-12">
                             <button type="submit" class="btn btn-success btn-lg btn-block">
-                                <i class="fa fa-save"></i> {{ 'bot.new.create'|trans }}
+                                <i class="fa fa-save"></i> {{ 'bot.new.build'|trans }}
                             </button>
                         </div>
 

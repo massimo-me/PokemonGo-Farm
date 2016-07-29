@@ -1,0 +1,65 @@
+{% extends 'base.html.twig' %}
+
+{% block page_title %}
+    PokemonGo-Bot List
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    Configs
+                </div>
+                <div class="panel-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+                                <th>Auth</th>
+                                <th>Username</th>
+                                <th>Password</th>
+                                <th>Name</th>
+                                <th>Action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for config in configs %}
+                                <tr>
+                                    <td>{{ config.authService|title }}</td>
+                                    <td><b>{{ config.username }}</b></td>
+                                    <td>{{ config.password }}</td>
+                                    <td>{{ config.getName }}</td>
+                                    <td>
+                                        <div class="row">
+                                            <div class="col-lg-4">
+                                                <button type="submit" class="btn btn-success btn-sm btn-block">
+                                                    <i class="fa fa-rocket"></i> {{ 'bot.new.btn_run'|trans }}
+                                                </button>
+                                            </div>
+                                            <div class="col-lg-4">
+                                                <button type="submit" class="btn btn-info btn-sm btn-block">
+                                                    <i class="fa fa-edit"></i> {{ 'bot.new.btn_edit'|trans }}
+                                                </button>
+                                            </div>
+                                            <div class="col-lg-4">
+                                                <button type="submit" class="btn btn-danger btn-sm btn-block">
+                                                    <i class="fa fa-remove"></i> {{ 'bot.new.btn_delete'|trans }}
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}

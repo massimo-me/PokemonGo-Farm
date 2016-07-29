@@ -4,6 +4,10 @@ namespace ChiarilloMassimo\PokemonGo\Farm\Service;
 
 use ChiarilloMassimo\PokemonGo\Farm\Model\Bot\Config;
 use ChiarilloMassimo\PokemonGo\Farm\SilexApp;
+use Symfony\Component\Filesystem\Exception\IOException;
+use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Finder\Finder;
+use Symfony\Component\Finder\SplFileInfo;
 
 /**
  * Class ConfigManager
@@ -38,14 +42,101 @@ class ConfigManager
     ];
 
     /**
-     * @param array $config
+     * @var Filesystem
+     */
+    protected $filesystem;
+
+    /**
+     * @var SplFileInfo[]
+     */
+    protected $list;
+
+    /**
+     * ConfigManager constructor.
+     */
+    public function __construct()
+    {
+        $this->filesystem = new Filesystem();
+
+        $this->list = (new Finder())
+            ->in(SilexApp::getInstance()['app.data.dir'])
+            ->files('*.'.Config::EXTENSION);
+    }
+
+    /**
+     * @return Config[]
+     */
+    public function findAll()
+    {
+        $configs = [];
+
+        foreach ($this->list as $splFileInfo) {
+            $configs[] = $this->jsonToModel($splFileInfo->getContents());
+        }
+
+        return $configs;
+    }
+
+    /**
+     * @param $configName
      * @return Config
      */
-    public function toConfig(array $config)
+    public function find($configName)
+    {
+        foreach ($this->list as $splFileInfo) {
+            if ($splFileInfo->getRelativePathname() == $configName) {
+                return $this->jsonToModel(
+                    $splFileInfo->getContents()
+                );
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * @param Config $config
+     * @return int
+     */
+    public function build(Config $config)
+    {
+        try {
+            $this->filesystem->dumpFile(
+                sprintf('%s/%s', SilexApp::getInstance()['app.data.dir'], $config->getName()),
+                $this->modelToJson($config)
+            );
+        } catch (IOException $e) {
+            //@ToDo Log exception
+            return false;
+        }
+
+        return $config;
+    }
+
+    /**
+     * @param $configName
+     * @return bool
+     */
+    public function read($configName)
+    {
+        $config = $this->find($configName);
+
+        if (!$config) {
+            return false;
+        }
+
+        return $config;
+    }
+
+    /**
+     * @param string $config
+     * @return Config
+     */
+    public function jsonToModel($config)
     {
         $data = new Config();
 
-        foreach ($config as $key => $value) {
+        foreach (json_decode($config, true) as $key => $value) {
             if (!array_key_exists($key, self::$methodMap)) {
                 continue;
             }
@@ -55,6 +146,8 @@ class ConfigManager
             if ($key == 'item_filter' || $key == 'evolve_all') {
                 if ($value == 'NONE') {
                     $data->{'set'.ucfirst($dataProperty)}([]);
+
+                    continue;
                 }
 
                 $data->{'set'.ucfirst($dataProperty)}(explode(',', $value));
@@ -72,7 +165,7 @@ class ConfigManager
      * @param Config $config
      * @return string
      */
-    public function toJson(Config $config)
+    public function modelToJson(Config $config)
     {
         $data = [];
 
@@ -89,40 +182,5 @@ class ConfigManager
         }
 
         return json_encode($data);
-    }
-
-
-    /**
-     * @param Config $config
-     * @return int
-     */
-    public function create(Config $config)
-    {
-        $fileName = sprintf('config_%s.json', $config->getUsername());
-
-        return file_put_contents(
-            sprintf('%s/%s', SilexApp::getInstance()['app.data.dir'], $fileName),
-            $this->toJson($config)
-        );
-    }
-
-    /**
-     * @param $configName
-     * @return bool
-     */
-    public function read($configName)
-    {
-        $configPath = sprintf('%s/%s', SilexApp::getInstance()['app.data.dir'], $configName);
-
-        if (!file_exists($configPath) || pathinfo($configPath, PATHINFO_EXTENSION) != 'json') {
-            return false;
-        }
-
-        return $this->toConfig(
-            json_decode(
-                file_get_contents($configPath),
-                true
-            )
-        );
     }
 }
