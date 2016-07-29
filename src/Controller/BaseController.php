@@ -6,6 +6,7 @@ use ChiarilloMassimo\PokemonGo\Farm\SilexApp;
 use Silex\Application;
 use Silex\ControllerCollection;
 use Silex\ControllerProviderInterface;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * Class BaseController

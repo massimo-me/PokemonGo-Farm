@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block page_title %}
+    <p style="margin-bottom: 10px;">Process status:
+        <span id="process-status" class="label label-info">...</span>
+    </p>
+{% endblock %}
+
+{% block content %}
+    <div class="col-lg-12">
+        <code id="log" class="hidden" style="white-space: pre-line"></code>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript">
+        $(function() {
+            setInterval(function(){
+                $.get('{{ path('bot_pool', { configName : config.name }) }}', function(data) {
+                    $('#log').removeClass('hidden');
+                    $('#log').text('PokemonGo-Bot: {{ config.username }}\n\n'+data.content);
+                    $('#process-status').removeClass().addClass('label');
+                    switch (data.status) {
+                        case 'running' :
+                            $('#process-status').addClass('label label-success').text('Running');
+                            break;
+                        case 'pending' :
+                            $('#process-status').addClass('label label-warning').text('Pending');
+                            break;
+                        case 'not-started' :
+                            $('#process-status').addClass('label label-danger').text('Not started');
+                            break;
+                    }
+                });
+            }, 2000);
+        });
+    </script>
+{% endblock %}

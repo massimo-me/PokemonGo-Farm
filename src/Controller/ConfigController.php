@@ -26,6 +26,7 @@ class ConfigController extends BaseController
     {
         $controllers = parent::connect($app);
 
+        //Refacotr this shit
         $controllers->get('/new', function() {
            return call_user_func([$this, 'newAction']);
         })->bind('config_new');

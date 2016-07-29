@@ -39,9 +39,9 @@
                                                 </a>
                                             </div>
                                             <div class="col-lg-4">
-                                                <button type="submit" class="btn btn-success btn-sm btn-block">
+                                                <a href="{{ path('bot_start', { configName : config.name }) }}" type="submit" class="btn btn-success btn-sm btn-block">
                                                     <i class="fa fa-rocket"></i> {{ 'config_list.btn_run'|trans }}
-                                                </button>
+                                                </a>
                                             </div>
                                             <div class="col-lg-4">
                                                 <a href="{{ path('config_remove', { configName : config.name }) }}" type="submit" class="btn btn-danger btn-sm btn-block">

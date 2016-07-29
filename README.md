@@ -7,6 +7,7 @@ Powerfull web interface to manage your bot ⚡️
 
 ![screencapture-pokemongo-farm-local-config-list-1469801800567](https://cloud.githubusercontent.com/assets/5167596/17251192/f5b93f04-55a7-11e6-97af-915a0abee81e.png)
 
+![screencapture-pokemongo-farm-local-bot-show-config_hello-massimo-me-json-1469833107430](https://cloud.githubusercontent.com/assets/5167596/17265637/c293d140-55f0-11e6-8a65-8d1b0f8b6c5b.png)
 
 #@Wip
 

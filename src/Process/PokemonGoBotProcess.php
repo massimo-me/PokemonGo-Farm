@@ -33,6 +33,12 @@ class PokemonGoBotProcess
     {
         $configPath = SilexApp::getInstance()['bot.config_manager']->getPath($config);
 
+        $logFilePath = sprintf('%s/%s.log', SilexApp::getInstance()['app.logs.dir'], $config->getUsername());
+
+        if (file_exists($logFilePath)) {
+            unlink($logFilePath);
+        }
+
         $command = sprintf(
             'pip install -r requirements.txt && ./pokecli.py -cf %s > %s',
             $configPath,
@@ -43,18 +49,51 @@ class PokemonGoBotProcess
             $command = 'virtualenv . && source bin/activate && ' . $command;
         }
 
-        $process = new Process(
+        return $this->run(
             sprintf(
                 '(cd %s/../PokemonGo-Bot %s) &',
                 SilexApp::getInstance()['app.dir'],
                 $command
             )
         );
+    }
 
-        $process->start();
+    /**
+     * @param Config $config
+     * @return int|null
+     */
+    protected function kill(Config $config)
+    {
+        $configPath = SilexApp::getInstance()['bot.config_manager']->getPath($config);
 
-        //Wtf?? @todo fix
-        return $process->getPid() + 1 ;
+        return $this->run(
+            sprintf(
+                'kill $(ps aux | grep \'python ./pokecli.py -cf %s\' | awk \'{print $2}\')',
+                $configPath
+            )
+        );
+    }
+
+    /**
+     * @param Config $config
+     * @return int|null
+     */
+    public function isRunning(Config $config)
+    {
+        $configPath = SilexApp::getInstance()['bot.config_manager']->getPath($config);
+
+        $process = new Process(
+            sprintf(
+                'ps aux | grep \'python ./pokecli.py -cf %s\' | awk \'{print $2}\'',
+                $configPath
+            )
+        );
+
+        $process->run();
+
+        return count(
+            array_filter(explode("\n", $process->getOutput()))
+        ) > 2;
     }
 
     /**
