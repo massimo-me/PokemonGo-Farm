@@ -2,3 +2,11 @@
     height: 200px;
     margin-bottom: 15px;
 }
+
+.process-status {
+    margin-bottom: 10px;
+}
+
+code#log {
+    white-space: pre-line;
+}

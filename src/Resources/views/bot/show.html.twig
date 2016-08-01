@@ -1,14 +1,14 @@
 {% extends 'base.html.twig' %}
 
 {% block page_title %}
-    <p style="margin-bottom: 10px;">Process status:
+    <p class="process-status">Process status:
         <span id="process-status" class="label label-info">...</span>
     </p>
 {% endblock %}
 
 {% block content %}
     <div class="col-lg-12">
-        <code id="log" class="hidden" style="white-space: pre-line"></code>
+        <code id="log" class="hidden"></code>
     </div>
 {% endblock %}
 

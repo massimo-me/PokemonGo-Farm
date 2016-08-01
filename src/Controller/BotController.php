@@ -22,7 +22,7 @@ class BotController extends BaseController
     {
         $controllers = parent::connect($app);
 
-        //Refacotr this shit
+        //@ToDo Refactor this shit :)
         $controllers->get('/start/{configName}', function($configName) {
             return call_user_func([$this, 'startAction'], $configName);
         })->bind('bot_start');
@@ -38,6 +38,10 @@ class BotController extends BaseController
         return $controllers;
     }
 
+    /**
+     * @param $configName
+     * @return mixed
+     */
     public function showAction($configName)
     {
         return $this->getApp()['twig']->render('bot/show.html.twig', [
@@ -65,9 +69,10 @@ class BotController extends BaseController
 
     /**
      * @param $configName
-     * @return string
+     * @param int $logLines
+     * @return JsonResponse
      */
-    public function poolAction($configName)
+    public function poolAction($configName, $logLines = 20)
     {
         $config = $this->getConfig($configName);
 
@@ -83,10 +88,16 @@ class BotController extends BaseController
             ]);
         }
 
+        $lines = explode(
+            "\n",
+            file_get_contents(
+                sprintf('%s/%s.log', SilexApp::getInstance()['app.logs.dir'], $config->getUsername()
+                )
+            )
+        );
+
         return new JsonResponse([
-            'content' => file_get_contents(
-                sprintf('%s/%s.log', SilexApp::getInstance()['app.logs.dir'], $config->getUsername())
-            ),
+            'content' => implode("\n", array_slice(array_reverse($lines), 0, $logLines)),
             'status' => ($isRunning) ? 'running' : 'pending'
         ]);
     }

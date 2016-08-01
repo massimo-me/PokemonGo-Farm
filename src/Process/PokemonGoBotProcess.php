@@ -91,9 +91,16 @@ class PokemonGoBotProcess
 
         $process->run();
 
-        return count(
-            array_filter(explode("\n", $process->getOutput()))
-        ) > 2;
+        return count(array_filter(explode("\n", $process->getOutput()))) > 2;
+    }
+
+    /**
+     * @param Config $config
+     * @return string
+     */
+    public function getLogFilePath(Config $config)
+    {
+        return sprintf('%s/%s.log', SilexApp::getInstance()['app.logs.dir'], $config->getUsername());
     }
 
     /**

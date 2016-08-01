@@ -5,6 +5,7 @@ namespace ChiarilloMassimo\PokemonGo\Farm;
 use ChiarilloMassimo\PokemonGo\Farm\Controller\BotController;
 use ChiarilloMassimo\PokemonGo\Farm\Controller\ConfigController;
 use ChiarilloMassimo\PokemonGo\Farm\Controller\DashboardController;
+use ChiarilloMassimo\PokemonGo\Farm\Process\PokemonGoBotProcess;
 use ChiarilloMassimo\PokemonGo\Farm\Service\ConfigManager;
 use Igorw\Silex\ConfigServiceProvider;
 use Silex\Application;
@@ -50,45 +51,66 @@ class SilexApp
      */
     protected function configure(Application $app)
     {
-        $this->app = $app;
+        array_map(
+            function($method) use (&$app) {
+                return call_user_func($method, $app);
+            },
+            [
+                [$this, 'configureCustomParameters'],
+                [$this, 'registerConfigurations'],
+                [$this, 'registerConfigurations'],
+                [$this, 'registerSession'],
+                [$this, 'registerControllers'],
+                [$this, 'registerTwig'],
+                [$this, 'registerForm'],
+                [$this, 'registerTranslation'],
+                [$this, 'registerUrlGenerator'],
+                [$this, 'registerPokemonGoBotConfigManager'],
+                [$this, 'registerPokemonGoBotProcess'],
 
-        $this->configureCustomParameters();
-        $this->registerConfigurations();
-        $this->registerSession();
-        $this->registerControllers();
-        $this->registerTwig();
-        $this->registerForm();
-        $this->registerTranslation();
-        $this->registerUrlGenerator();
-        $this->registerPokemonGoBotConfigManager();
+            ]
+        );
+
+        $this->app = $app;
 
         return $app;
     }
 
-    protected function configureCustomParameters()
+    /**
+     * @param Application $app
+     * @return Application
+     */
+    protected function configureCustomParameters(Application $app)
     {
-        $this->app['app.dir'] = $this->getAppDir();
-        $this->app['app.logs.dir'] = $this->getLogsDir();
-        $this->app['app.data.dir'] = $this->getDataDir();
+        $app['app.dir'] = $this->getAppDir();
+        $app['app.logs.dir'] = $this->getLogsDir();
+        $app['app.data.dir'] = $this->getDataDir();
+
+        return $app;
     }
 
-    protected function registerConfigurations()
+    /**
+     * @param Application $app
+     * @return Application
+     */
+    protected function registerConfigurations(Application $app)
     {
-        $this->app->register(
+        $app->register(
             new ConfigServiceProvider(
                 sprintf('%s/config/config.json', $this->getAppDir()),
                 $this->getParameters()
             )
         );
+
+        return $app;
     }
 
     /**
+     * @param Application $app
      * @return Application
      */
-    protected function registerControllers()
+    protected function registerControllers(Application $app)
     {
-        $app = $this->app;
-
         array_map(
             function($controllerProvider) use ($app) {
                 $app->mount($controllerProvider['prefix'], $controllerProvider['class']);
@@ -111,55 +133,108 @@ class SilexApp
         return $app;
     }
 
-    protected function registerSession()
+    /**
+     * @param Application $app
+     * @return Application
+     */
+    protected function registerSession(Application $app)
     {
-        $this->app->register(new SessionServiceProvider());
+        $app->register(new SessionServiceProvider());
+
+        return $app;
     }
 
-    protected function registerTwig()
+    /**
+     * @param $app
+     * @return Application
+     */
+    protected function registerTwig(Application $app)
     {
-        $this->app->register(new TwigServiceProvider(), [
-            'twig.path' => sprintf('%s/../src/Resources/views', $this->app['app.dir'])
+        $app->register(new TwigServiceProvider(), [
+            'twig.path' => sprintf('%s/../src/Resources/views', $app['app.dir'])
         ]);
 
-        $gmapBrowserApiKey = $this->app['gmap.browser.api_key'];
+        $gmapBrowserApiKey = $app['gmap.browser.api_key'];
 
-        $this->app->extend('twig', function($twig) use ($gmapBrowserApiKey) {
-            $twig->addGlobal('gmap_api_key', $gmapBrowserApiKey);
+        $app->extend(
+            'twig',
+            function($twig) use ($gmapBrowserApiKey) {
+                $twig->addGlobal('gmap_api_key', $gmapBrowserApiKey);
 
-            return $twig;
-        });
+                return $twig;
+            }
+        );
     }
 
-    protected function registerForm()
+    /**
+     * @param Application $app
+     * @return Application
+     */
+    protected function registerForm(Application $app)
     {
-        $this->app->register(new FormServiceProvider());
+        $app->register(new FormServiceProvider());
+
+        return $app;
     }
 
-    protected function registerTranslation()
+    /**
+     * @param  $app
+     * @return Application
+     */
+    protected function registerTranslation($app)
     {
-        $this->app->register(new TranslationServiceProvider());
-        $appDir = $this->app['app.dir'];
+        $app->register(new TranslationServiceProvider());
 
-        $this->app->extend('translator', function($translator) use ($appDir) {
-            $translator->addLoader('json', new JsonFileLoader());
+        $app->extend(
+            'translator',
+            function($translator) use ($app) {
+                $translator->addLoader('json', new JsonFileLoader());
+                $translator->addResource('json', sprintf('%s/%s', $app['app.dir'], 'locales/en.json'), 'en');
 
-            $translator->addResource('json', sprintf('%s/%s', $appDir, 'locales/en.json'), 'en');
-
-            return $translator;
-        });
+                return $translator;
+            }
+        );
     }
 
-    protected function registerUrlGenerator()
+    /**
+     * @param Application $app
+     * @return Application
+     */
+    protected function registerUrlGenerator(Application $app)
     {
-        $this->app->register(new UrlGeneratorServiceProvider());
+        $app->register(new UrlGeneratorServiceProvider());
+
+        return $app;
     }
 
-    protected function registerPokemonGoBotConfigManager()
+    /**
+     * @param $app
+     * @return Application
+     */
+    protected function registerPokemonGoBotConfigManager(Application $app)
     {
-        $this->app['bot.config_manager'] = $this->app->share(function() {
-           return new ConfigManager();
-        });
+        $app['bot.config_manager'] = $app->share(
+            function() {
+                return new ConfigManager();
+            }
+        );
+
+        return $app;
+    }
+
+    /**
+     * @param Application $app
+     * @return Application
+     */
+    protected function registerPokemonGoBotProcess(Application $app)
+    {
+        $app['bot.process'] = $app->share(
+            function() {
+                return new PokemonGoBotProcess();
+            }
+        );
+
+        return $app;
     }
 
     /**
