@@ -3,6 +3,8 @@
 {% block page_title %}
     <p class="process-status">Process status:
         <span id="process-status" class="label label-info">...</span>
+        <a id="btn-stop" href="{{ path('bot_stop', { configName : config.name }) }}" class="btn btn-danger btn-lg pull-right" style="margin-left: 10px"> <i class="fa fa-stop-circle-o"></i> Stop</a>
+        <a id="btn-start" href="{{ path('bot_start', { configName : config.name }) }}" class="btn btn-success btn-lg pull-right"> <i class="fa fa-play-circle"></i> Start</a>
     </p>
 {% endblock %}
 
@@ -24,12 +26,16 @@
                     switch (data.status) {
                         case 'running' :
                             $('#process-status').addClass('label label-success').text('Running');
+                            $('#btn-start').addClass('hidden');
+                            $('#btn-stop').removeClass('hidden');
                             break;
                         case 'pending' :
                             $('#process-status').addClass('label label-warning').text('Pending');
                             break;
                         case 'not-started' :
                             $('#process-status').addClass('label label-danger').text('Not started');
+                            $('#btn-start').removeClass('hidden');
+                            $('#btn-stop').addClass('hidden');
                             break;
                     }
                 });

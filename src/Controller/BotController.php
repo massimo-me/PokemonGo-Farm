@@ -2,7 +2,6 @@
 
 namespace ChiarilloMassimo\PokemonGo\Farm\Controller;
 
-use ChiarilloMassimo\PokemonGo\Farm\Process\PokemonGoBotProcess;
 use ChiarilloMassimo\PokemonGo\Farm\SilexApp;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -27,6 +26,10 @@ class BotController extends BaseController
             return call_user_func([$this, 'startAction'], $configName);
         })->bind('bot_start');
 
+        $controllers->get('/stop/{configName}', function($configName) {
+            return call_user_func([$this, 'stopAction'], $configName);
+        })->bind('bot_stop');
+
         $controllers->get('/show/{configName}', function($configName) {
             return call_user_func([$this, 'showAction'], $configName);
         })->bind('bot_show');
@@ -44,8 +47,11 @@ class BotController extends BaseController
      */
     public function showAction($configName)
     {
+        $config = $this->getConfig($configName);
+
         return $this->getApp()['twig']->render('bot/show.html.twig', [
-            'config' => $this->getConfig($configName)
+            'config' => $config,
+            'isRunning' => SilexApp::getInstance()['bot.process']->isRunning($config)
         ]);
     }
 
@@ -57,8 +63,11 @@ class BotController extends BaseController
     {
         $config = $this->getConfig($configName);
 
-        (new PokemonGoBotProcess())
-            ->start($config);
+        $botProcess = SilexApp::getInstance()['bot.process'];
+
+        if (!$botProcess->isRunning($config)) {
+            $botProcess->start($config);
+        }
 
         return SilexApp::getInstance()->redirect(
             SilexApp::getInstance()['url_generator']->generate('bot_show', [
@@ -69,17 +78,36 @@ class BotController extends BaseController
 
     /**
      * @param $configName
-     * @param int $logLines
-     * @return JsonResponse
+     * @return Response
      */
-    public function poolAction($configName, $logLines = 20)
+    public function stopAction($configName)
     {
         $config = $this->getConfig($configName);
 
-        $isRunning = (new PokemonGoBotProcess())
-            ->isRunning($config);
+        $botProcess = SilexApp::getInstance()['bot.process'];
 
-        $logFilePath = sprintf('%s/%s.log', SilexApp::getInstance()['app.logs.dir'], $config->getUsername());
+        $botProcess->kill($config);
+
+        return SilexApp::getInstance()->redirect(
+            SilexApp::getInstance()['url_generator']->generate('bot_show', [
+                'configName' => $configName
+            ])
+        );
+    }
+
+    /**
+     * @param $configName
+     * @param int $maxLogLines
+     * @return JsonResponse
+     */
+    public function poolAction($configName, $maxLogLines = 20)
+    {
+        $config = $this->getConfig($configName);
+
+        $botProcess = SilexApp::getInstance()['bot.process'];
+
+        $isRunning = $botProcess->isRunning($config);
+        $logFilePath = $botProcess->getLogFilePath($config);
 
         if (!file_exists($logFilePath)) {
             return new JsonResponse([
@@ -88,16 +116,10 @@ class BotController extends BaseController
             ]);
         }
 
-        $lines = explode(
-            "\n",
-            file_get_contents(
-                sprintf('%s/%s.log', SilexApp::getInstance()['app.logs.dir'], $config->getUsername()
-                )
-            )
-        );
+        $logLines = explode("\n", file_get_contents($logFilePath));
 
         return new JsonResponse([
-            'content' => implode("\n", array_slice(array_reverse($lines), 0, $logLines)),
+            'content' => implode("\n", array_slice(array_reverse($logLines), 0, $maxLogLines)),
             'status' => ($isRunning) ? 'running' : 'pending'
         ]);
     }

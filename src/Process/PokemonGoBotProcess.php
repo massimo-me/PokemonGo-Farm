@@ -33,16 +33,12 @@ class PokemonGoBotProcess
     {
         $configPath = SilexApp::getInstance()['bot.config_manager']->getPath($config);
 
-        $logFilePath = sprintf('%s/%s.log', SilexApp::getInstance()['app.logs.dir'], $config->getUsername());
-
-        if (file_exists($logFilePath)) {
-            unlink($logFilePath);
-        }
+        $this->clearLog($config);
 
         $command = sprintf(
             'pip install -r requirements.txt && ./pokecli.py -cf %s > %s',
             $configPath,
-            sprintf('%s/%s.log', SilexApp::getInstance()['app.logs.dir'], $config->getUsername())
+            $this->getLogFilePath($config)
         );
 
         if ($this->virtualEnv) {
@@ -62,15 +58,18 @@ class PokemonGoBotProcess
      * @param Config $config
      * @return int|null
      */
-    protected function kill(Config $config)
+    public function kill(Config $config)
     {
         $configPath = SilexApp::getInstance()['bot.config_manager']->getPath($config);
 
-        return $this->run(
+        $this->clearLog($config);
+
+        $this->run(
             sprintf(
                 'kill $(ps aux | grep \'python ./pokecli.py -cf %s\' | awk \'{print $2}\')',
                 $configPath
-            )
+            ),
+            false
         );
     }
 
@@ -82,16 +81,15 @@ class PokemonGoBotProcess
     {
         $configPath = SilexApp::getInstance()['bot.config_manager']->getPath($config);
 
-        $process = new Process(
+        $result = $this->run(
             sprintf(
                 'ps aux | grep \'python ./pokecli.py -cf %s\' | awk \'{print $2}\'',
                 $configPath
-            )
+            ),
+            false
         );
 
-        $process->run();
-
-        return count(array_filter(explode("\n", $process->getOutput()))) > 2;
+        return count(array_filter(explode("\n", $result))) > 2;
     }
 
     /**
@@ -104,14 +102,36 @@ class PokemonGoBotProcess
     }
 
     /**
+     * @param Config $config
+     */
+    public function clearLog(Config $config)
+    {
+        $logFilePath = $this->getLogFilePath($config);
+
+        if (file_exists($logFilePath)) {
+            unlink($logFilePath);
+        }
+    }
+
+    /**
      * @param $command
+     * @param bool $background
      * @return int|null
      */
-    protected function run($command)
+    protected function run($command, $background = true)
     {
         $process = new Process($command);
-        $process->start();
 
-        return $process->getPid();
+        if ($background) {
+            $process->start();
+            return $process->getPid();
+        }
+
+        try {
+            $process->run();
+            return $process->getOutput();
+        } catch (\RuntimeException $e) {
+            return;
+        }
     }
 }

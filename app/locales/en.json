@@ -25,7 +25,7 @@
   "config_new.test" : "Test",
   "config_new.build" : "Build",
   "config_new.error" : "Unable to create your configuration file.",
-  "config_list.btn_run" : "Run",
+  "config_list.btn_show" : "Show",
   "config_list.btn_edit" : "Edit",
   "config_list.btn_remove" : "Remove",
   "config_edit.edit" : "Edit",
